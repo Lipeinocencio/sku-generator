@@ -7,42 +7,6 @@ const CATEGORIAS = {
   "CALCA": "calc"
 };
 
-function getDatabase() {
-  return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-}
-
-function saveDatabase(db) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
-}
-
-function normalizar(txt) {
-  return txt
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .trim();
-}
-
-function gerarCodigoVariacao(baseSku, variacao, db) {
-  let base = normalizar(variacao).replace(/\s+/g, "").substring(0, 4);
-  let codigo = base;
-  let contador = 2;
-
-  while (db.includes(`${baseSku}-${codigo}`)) {
-    codigo = `${base}${contador}`;
-    contador++;
-  }
-
-  return codigo;
-}
-
-function adicionarVariacao() {
-  const div = document.getElementById("variacoes");
-  const input = document.createElement("input");
-  input.placeholder = "Ex: Verde";
-  div.appendChild(input);
-}
-
 function gerarSKUs() {
   const produto = document.getElementById("produto").value;
   const status = document.getElementById("status");
@@ -58,8 +22,7 @@ function gerarSKUs() {
   }
 
   const palavras = normalizar(produto).split(" ");
-  const categoria =
-    CATEGORIAS[palavras[0].toUpperCase()] || palavras[0].substring(0, 4);
+  const categoria = CATEGORIAS[palavras[0]] || palavras[0].substring(0, 4);
   const nome = palavras[1] ? palavras[1].substring(0, 4) : "item";
 
   const baseSku = `${PREFIXO}-${categoria}-${nome}`;
@@ -68,11 +31,12 @@ function gerarSKUs() {
   let novos = 0;
   let existentes = 0;
 
+  // 🔹 BUSCA VARIAÇÕES PREENCHIDAS
   const variacoes = Array.from(
     document.querySelectorAll("#variacoes input")
   ).filter(v => v.value.trim() !== "");
 
-  // 🔹 SEM VARIAÇÃO
+  // ✅ CASO SEM VARIAÇÃO → GERA SKU BASE
   if (variacoes.length === 0) {
     if (db.includes(baseSku)) {
       resultado.innerHTML = `<p style="color:orange">⚠ ${baseSku} (já existia)</p>`;
@@ -88,7 +52,7 @@ function gerarSKUs() {
     return;
   }
 
-  // 🔹 COM VARIAÇÕES
+  // 🔹 CASO COM VARIAÇÕES
   variacoes.forEach(v => {
     const codigoVariacao = gerarCodigoVariacao(baseSku, v.value, db);
     const skuFinal = `${baseSku}-${codigoVariacao}`;
