@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Gerador de SKU</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -11,24 +11,21 @@
   <h1>Gerador de SKU</h1>
 
   <label>Produto base</label>
-  <input type="text" id="produto" placeholder="Ex: Blusa Celina" />
+  <input id="produto" placeholder="Ex: Blusa Celina">
 
   <label>Variações</label>
 
   <div id="variacoes">
-    <div class="variacao">
-      <input type="text" placeholder="Ex: Verde" />
-    </div>
+    <input placeholder="Ex: Verde">
   </div>
 
-  <button type="button" onclick="adicionarVariacao()">+ Adicionar variação</button>
-
+  <button onclick="adicionarVariacao()">+ Adicionar variação</button>
   <button onclick="gerarSKUs()">Gerar SKUs</button>
 
   <div id="resultado"></div>
   <p id="status"></p>
 </div>
 
-<script src="script.js"></script>
+<script src="script.js?v=2"></script>
 </body>
 </html>
