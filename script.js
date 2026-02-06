@@ -7,6 +7,7 @@ const USUARIOS = [
 
 // ===== CONFIG =====
 const STORAGE_KEY = "sku_database";
+const SESSION_KEY = "sku_session";
 const PREFIXO = "mag";
 let loggedUser = null;
 
@@ -73,6 +74,10 @@ function fazerLogin() {
 
   loggedUser = found;
   erro.textContent = "";
+
+  // Salvar sessão
+  try { localStorage.setItem(SESSION_KEY, JSON.stringify({ user: found.user })); } catch (e) {}
+
   document.getElementById("telaLogin").classList.add("hidden");
   document.getElementById("telaApp").classList.remove("hidden");
   document.getElementById("welcomeUser").textContent = "👤 " + found.nome;
@@ -82,6 +87,7 @@ function fazerLogin() {
 
 function fazerLogout() {
   loggedUser = null;
+  try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
   document.getElementById("telaApp").classList.add("hidden");
   document.getElementById("telaLogin").classList.remove("hidden");
   document.getElementById("loginUser").value = "";
@@ -398,6 +404,26 @@ function buscarSku() {
 
 // ===== EVENTOS =====
 document.addEventListener("DOMContentLoaded", function () {
+
+  // Verificar sessão salva
+  try {
+    var session = localStorage.getItem(SESSION_KEY);
+    if (session) {
+      var data = JSON.parse(session);
+      for (var i = 0; i < USUARIOS.length; i++) {
+        if (USUARIOS[i].user === data.user) {
+          loggedUser = USUARIOS[i];
+          document.getElementById("telaLogin").classList.add("hidden");
+          document.getElementById("telaApp").classList.remove("hidden");
+          document.getElementById("welcomeUser").textContent = "👤 " + USUARIOS[i].nome;
+          adicionarProduto();
+          renderSkuList();
+          break;
+        }
+      }
+    }
+  } catch (e) {}
+
   // Login
   document.getElementById("btnLogin").addEventListener("click", fazerLogin);
   document.getElementById("loginPass").addEventListener("keydown", function (e) {
