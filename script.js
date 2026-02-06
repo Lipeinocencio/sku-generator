@@ -2,10 +2,46 @@ const STORAGE_KEY = "sku_database";
 const PREFIXO = "mag";
 
 const CATEGORIAS = {
-  "BLUSA": "blus",
-  "VESTIDO": "vest",
-  "CALCA": "calc"
+  blusa: "blus",
+  vestido: "vest",
+  calca: "calc"
 };
+
+function getDatabase() {
+  return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+}
+
+function saveDatabase(db) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+}
+
+function normalizar(txt) {
+  return txt
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+}
+
+function gerarCodigoVariacao(baseSku, variacao, db) {
+  let base = normalizar(variacao).replace(/\s+/g, "").substring(0, 4);
+  let codigo = base || "base";
+  let contador = 2;
+
+  while (db.includes(`${baseSku}-${codigo}`)) {
+    codigo = `${base}${contador}`;
+    contador++;
+  }
+
+  return codigo;
+}
+
+function adicionarVariacao() {
+  const div = document.getElementById("variacoes");
+  const input = document.createElement("input");
+  input.placeholder = "Ex: Verde";
+  div.appendChild(input);
+}
 
 function gerarSKUs() {
   const produto = document.getElementById("produto").value;
@@ -31,12 +67,11 @@ function gerarSKUs() {
   let novos = 0;
   let existentes = 0;
 
-  // 🔹 BUSCA VARIAÇÕES PREENCHIDAS
   const variacoes = Array.from(
     document.querySelectorAll("#variacoes input")
-  ).filter(v => v.value.trim() !== "");
+  ).filter(v => v.type !== "hidden" && v.value.trim() !== "");
 
-  // ✅ CASO SEM VARIAÇÃO → GERA SKU BASE
+  // 🔹 SEM VARIAÇÃO
   if (variacoes.length === 0) {
     if (db.includes(baseSku)) {
       resultado.innerHTML = `<p style="color:orange">⚠ ${baseSku} (já existia)</p>`;
@@ -52,7 +87,7 @@ function gerarSKUs() {
     return;
   }
 
-  // 🔹 CASO COM VARIAÇÕES
+  // 🔹 COM VARIAÇÕES
   variacoes.forEach(v => {
     const codigoVariacao = gerarCodigoVariacao(baseSku, v.value, db);
     const skuFinal = `${baseSku}-${codigoVariacao}`;
