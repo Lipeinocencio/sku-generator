@@ -1,32 +1,48 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Gerador de SKU</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
   <div class="container">
     <h1>Gerador de SKU</h1>
 
-    <input 
-      type="text" 
-      id="produto" 
-      placeholder="Ex: Blusa Celina"
-    >
+    <!-- PRODUTO -->
+    <label>Produto</label>
+    <input
+      type="text"
+      id="produto"
+      placeholder="Ex: Blusa Canelada"
+    />
 
-    <button class="add-variacao" onclick="adicionarVariacao()">
+    <!-- AÇÃO VARIAÇÃO -->
+    <button
+      type="button"
+      class="add-variacao"
+      onclick="adicionarVariacao()"
+    >
       + adicionar variação
     </button>
 
+    <!-- VARIAÇÕES (OPCIONAL) -->
     <div id="variacoes"></div>
 
-    <button class="gerar" onclick="gerarSKUs()">
+    <!-- GERAR -->
+    <button
+      type="button"
+      class="gerar"
+      onclick="gerarSKUs()"
+    >
       Gerar SKU
     </button>
 
+    <!-- STATUS -->
     <p id="status"></p>
+
+    <!-- RESULTADO -->
     <div id="resultado"></div>
   </div>
 
