@@ -27,20 +27,18 @@ function gerarSKU() {
     return;
   }
 
-  const sku = formatarSKU(produto);
+  const baseSKU = formatarSKU(produto);
   const db = getDatabase();
 
-  if (db.includes(sku)) {
-    status.textContent = "⚠️ SKU já existe! Produto duplicado.";
-    status.style.color = "red";
-    document.getElementById("sku").value = "";
-    return;
-  }
+  const relacionados = db.filter(sku => sku.startsWith(baseSKU));
+  const sequencial = String(relacionados.length + 1).padStart(3, "0");
 
-  db.push(sku);
+  const skuFinal = `${baseSKU}-${sequencial}`;
+
+  db.push(skuFinal);
   saveDatabase(db);
 
-  document.getElementById("sku").value = sku;
+  document.getElementById("sku").value = skuFinal;
   status.textContent = "SKU salvo com sucesso!";
   status.style.color = "green";
 }
