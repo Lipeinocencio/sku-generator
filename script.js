@@ -23,17 +23,17 @@ function normalizar(txt) {
     .trim();
 }
 
-function abreviarSeguro(baseSku, sufixo, db) {
-  let codigo = sufixo.substring(0, 4);
-  let tentativa = codigo;
+function gerarCodigoVariacao(baseSku, variacao, db) {
+  let base = normalizar(variacao).replace(/\s+/g, "").substring(0, 4);
+  let codigo = base;
   let contador = 2;
 
-  while (db.some(sku => sku.startsWith(`${baseSku}-${tentativa}`))) {
-    tentativa = `${codigo}${contador}`;
+  while (db.includes(`${baseSku}-${codigo}`)) {
+    codigo = `${base}${contador}`;
     contador++;
   }
 
-  return tentativa;
+  return codigo;
 }
 
 function adicionarVariacao() {
@@ -58,7 +58,8 @@ function gerarSKUs() {
   }
 
   const palavras = normalizar(produto).split(" ");
-  const categoria = CATEGORIAS[palavras[0].toUpperCase()] || palavras[0].substring(0, 4);
+  const categoria =
+    CATEGORIAS[palavras[0].toUpperCase()] || palavras[0].substring(0, 4);
   const nome = palavras[1] ? palavras[1].substring(0, 4) : "item";
 
   const baseSku = `${PREFIXO}-${categoria}-${nome}`;
@@ -69,23 +70,11 @@ function gerarSKUs() {
 
   const variacoes = document.querySelectorAll("#variacoes input");
 
-  if (variacoes.length === 0) {
-    if (db.includes(baseSku)) {
-      resultado.innerHTML = `<p style="color:orange">⚠ ${baseSku} (já existia)</p>`;
-      existentes++;
-    } else {
-      db.push(baseSku);
-      resultado.innerHTML = `<p style="color:green">✔ ${baseSku}</p>`;
-      novos++;
-    }
-  }
-
   variacoes.forEach(v => {
     if (!v.value) return;
 
-    const sufixo = normalizar(v.value);
-    const codigoSeguro = abreviarSeguro(baseSku, sufixo, db);
-    const skuFinal = `${baseSku}-${codigoSeguro}`;
+    const codigoVariacao = gerarCodigoVariacao(baseSku, v.value, db);
+    const skuFinal = `${baseSku}-${codigoVariacao}`;
 
     if (db.includes(skuFinal)) {
       resultado.innerHTML += `<p style="color:orange">⚠ ${skuFinal} (já existia)</p>`;
