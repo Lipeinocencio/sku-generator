@@ -50,3 +50,14 @@ button {
 button:hover {
   opacity: 0.9;
 }
+
+.variacao {
+  margin-bottom: 8px;
+}
+
+#resultado {
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+
