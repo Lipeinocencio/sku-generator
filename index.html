@@ -10,42 +10,32 @@
   <div class="container">
     <h1>Gerador de SKU</h1>
 
-    <!-- PRODUTO -->
-    <label>Produto</label>
     <input
       type="text"
       id="produto"
       placeholder="Ex: Blusa Canelada"
     />
 
-    <!-- AÇÃO VARIAÇÃO -->
-    <button
-      type="button"
-      class="add-variacao"
-      onclick="adicionarVariacao()"
-    >
+    <button type="button" onclick="adicionarVariacao()">
       + adicionar variação
     </button>
 
-    <!-- VARIAÇÕES (OPCIONAL) -->
     <div id="variacoes"></div>
 
-    <!-- GERAR -->
-    <button
-      type="button"
-      class="gerar"
-      onclick="gerarSKUs()"
-    >
+    <button type="button" onclick="gerarSKUs()">
       Gerar SKU
     </button>
 
-    <!-- STATUS -->
     <p id="status"></p>
-
-    <!-- RESULTADO -->
     <div id="resultado"></div>
   </div>
 
+  <!-- TESTE DE JS -->
+  <script>
+    console.log("JS INLINE FUNCIONANDO");
+  </script>
+
+  <!-- SCRIPT PRINCIPAL -->
   <script src="./script.js"></script>
 </body>
 </html>
