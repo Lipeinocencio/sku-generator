@@ -19,17 +19,25 @@ function normalizar(txt) {
   return txt
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
-    .toUpperCase()
+    .toLowerCase()
     .trim();
 }
 
-function abreviar(txt, n) {
-  return txt.substring(0, n).toLowerCase();
+function abreviarSeguro(baseSku, sufixo, db) {
+  let codigo = sufixo.substring(0, 4);
+  let tentativa = codigo;
+  let contador = 2;
+
+  while (db.some(sku => sku.startsWith(`${baseSku}-${tentativa}`))) {
+    tentativa = `${codigo}${contador}`;
+    contador++;
+  }
+
+  return tentativa;
 }
 
 function adicionarVariacao() {
   const div = document.getElementById("variacoes");
-
   const input = document.createElement("input");
   input.placeholder = "Ex: Verde";
   div.appendChild(input);
@@ -44,54 +52,51 @@ function gerarSKUs() {
   status.textContent = "";
 
   if (!produto) {
-    status.textContent = "Digite o nome do produto.";
+    status.textContent = "Digite o produto base.";
     status.style.color = "red";
     return;
   }
 
   const palavras = normalizar(produto).split(" ");
-  const categoria = CATEGORIAS[palavras[0]] || abreviar(palavras[0], 4);
-  const nome = abreviar(palavras[1] || "", 4);
+  const categoria = CATEGORIAS[palavras[0].toUpperCase()] || palavras[0].substring(0, 4);
+  const nome = palavras[1] ? palavras[1].substring(0, 4) : "item";
 
+  const baseSku = `${PREFIXO}-${categoria}-${nome}`;
   const db = getDatabase();
+
   let novos = 0;
   let existentes = 0;
 
   const variacoes = document.querySelectorAll("#variacoes input");
 
-  // 🔹 Sem variação
   if (variacoes.length === 0) {
-    const sku = `${PREFIXO}-${categoria}-${nome}`;
-
-    if (db.includes(sku)) {
-      resultado.innerHTML = `<p style="color:orange">⚠ ${sku} (já existia)</p>`;
+    if (db.includes(baseSku)) {
+      resultado.innerHTML = `<p style="color:orange">⚠ ${baseSku} (já existia)</p>`;
       existentes++;
     } else {
-      db.push(sku);
-      resultado.innerHTML = `<p style="color:green">✔ ${sku}</p>`;
+      db.push(baseSku);
+      resultado.innerHTML = `<p style="color:green">✔ ${baseSku}</p>`;
       novos++;
     }
   }
 
-  // 🔹 Com variações
   variacoes.forEach(v => {
     if (!v.value) return;
 
-    const cor = abreviar(normalizar(v.value), 3);
-    const sku = `${PREFIXO}-${categoria}-${nome}-${cor}`;
+    const sufixo = normalizar(v.value);
+    const codigoSeguro = abreviarSeguro(baseSku, sufixo, db);
+    const skuFinal = `${baseSku}-${codigoSeguro}`;
 
-    if (db.includes(sku)) {
-      resultado.innerHTML += `<p style="color:orange">⚠ ${sku} (já existia)</p>`;
+    if (db.includes(skuFinal)) {
+      resultado.innerHTML += `<p style="color:orange">⚠ ${skuFinal} (já existia)</p>`;
       existentes++;
     } else {
-      db.push(sku);
-      resultado.innerHTML += `<p style="color:green">✔ ${sku}</p>`;
+      db.push(skuFinal);
+      resultado.innerHTML += `<p style="color:green">✔ ${skuFinal}</p>`;
       novos++;
     }
   });
 
   saveDatabase(db);
-
   status.textContent = `${novos} novo(s), ${existentes} já existente(s)`;
-  status.style.color = "black";
 }
