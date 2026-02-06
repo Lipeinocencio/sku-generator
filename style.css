@@ -120,13 +120,17 @@ body {
 /* ===========================
    INPUTS & BUTTONS (APP)
    =========================== */
-.container input {
+.container input[type="text"],
+.container input[type="password"] {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 14px;
+  background: #fff;
+  color: #333;
+  display: block;
 }
 
 .container button {
@@ -187,7 +191,10 @@ small.add:hover { color: #000; }
   gap: 8px;
   margin-bottom: 8px;
 }
-.produto-block-header input { flex: 1; margin: 0; }
+.produto-block-header input[type="text"] {
+  flex: 1;
+  margin: 0 !important;
+}
 
 .produto-label {
   font-size: 12px;
@@ -208,14 +215,18 @@ small.add:hover { color: #000; }
   gap: 8px;
   margin-bottom: 8px;
 }
-.variacao-item input { flex: 1; margin: 0; }
+.variacao-item input[type="text"] {
+  flex: 1;
+  margin: 0 !important;
+}
 
 .btn-icon {
-  width: 34px;
+  width: 34px !important;
   min-width: 34px;
+  max-width: 34px;
   height: 34px;
-  padding: 0;
-  margin: 0;
+  padding: 0 !important;
+  margin: 0 !important;
   border: none;
   border-radius: 4px;
   font-size: 16px;
@@ -224,6 +235,7 @@ small.add:hover { color: #000; }
   align-items: center;
   justify-content: center;
   color: #fff;
+  flex-shrink: 0;
 }
 .btn-icon-red { background: #e53935 !important; }
 .btn-icon-red:hover { background: #b71c1c !important; }
