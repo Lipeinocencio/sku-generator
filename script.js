@@ -1,3 +1,6 @@
+// ===============================
+// CONFIGURAÇÕES
+// ===============================
 const STORAGE_KEY = "sku_database";
 const PREFIXO = "mag";
 
@@ -7,6 +10,9 @@ const CATEGORIAS = {
   calca: "calc"
 };
 
+// ===============================
+// BANCO LOCAL
+// ===============================
 function getDatabase() {
   return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 }
@@ -15,6 +21,9 @@ function saveDatabase(db) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
 }
 
+// ===============================
+// UTILIDADES
+// ===============================
 function normalizar(txt) {
   return txt
     .normalize("NFD")
@@ -24,7 +33,10 @@ function normalizar(txt) {
 }
 
 function gerarCodigoVariacao(baseSku, variacao, db) {
-  let base = normalizar(variacao).replace(/\s+/g, "").substring(0, 4);
+  let base = normalizar(variacao)
+    .replace(/\s+/g, "")
+    .substring(0, 4);
+
   let codigo = base || "base";
   let contador = 2;
 
@@ -36,6 +48,9 @@ function gerarCodigoVariacao(baseSku, variacao, db) {
   return codigo;
 }
 
+// ===============================
+// UI
+// ===============================
 function adicionarVariacao() {
   const div = document.getElementById("variacoes");
   const input = document.createElement("input");
@@ -43,6 +58,9 @@ function adicionarVariacao() {
   div.appendChild(input);
 }
 
+// ===============================
+// GERAÇÃO DE SKU
+// ===============================
 function gerarSKUs() {
   const produto = document.getElementById("produto").value;
   const status = document.getElementById("status");
@@ -69,7 +87,7 @@ function gerarSKUs() {
 
   const variacoes = Array.from(
     document.querySelectorAll("#variacoes input")
-  ).filter(v => v.type !== "hidden" && v.value.trim() !== "");
+  ).filter(v => v.value.trim() !== "");
 
   // 🔹 SEM VARIAÇÃO
   if (variacoes.length === 0) {
