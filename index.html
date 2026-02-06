@@ -6,24 +6,21 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
   <div class="container">
     <h1>Gerador de SKU</h1>
 
-    <input id="produto" placeholder="Blusa Canelada">
+    <input id="produto" placeholder="Ex: Blusa Canelada" />
 
     <div id="variacoes"></div>
 
-    <small class="add" onclick="adicionarVariacao()">+ adicionar variação</small>
+    <small class="add" id="btnVariacao">+ adicionar variação</small>
 
-    <button onclick="gerarSKUs()">Gerar SKU</button>
+    <button id="btnGerar">Gerar SKU</button>
 
     <div id="status"></div>
     <div id="resultado"></div>
   </div>
 
-  <!-- ⚠️ SCRIPT NO FINAL DO BODY -->
   <script src="script.js"></script>
-
 </body>
 </html>
