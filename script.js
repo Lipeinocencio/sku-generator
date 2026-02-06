@@ -1,4 +1,14 @@
 const STORAGE_KEY = "sku_database";
+const PREFIXO = "mag";
+
+// abreviações fixas de categorias
+const CATEGORIAS = {
+  "VESTIDO": "vest",
+  "BLUSA": "blus",
+  "CALCA": "calc",
+  "SAIA": "saia",
+  "SHORT": "shrt"
+};
 
 function getDatabase() {
   return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
@@ -8,37 +18,49 @@ function saveDatabase(db) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
 }
 
-function formatarSKU(texto) {
+function normalizar(texto) {
   return texto
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .toUpperCase()
-    .trim()
-    .replace(/\s+/g, "-");
+    .trim();
+}
+
+function abreviar(palavra, tamanho = 4) {
+  return palavra.substring(0, tamanho).toLowerCase();
 }
 
 function gerarSKU() {
-  const produto = document.getElementById("produto").value;
+  const produtoInput = document.getElementById("produto").value;
   const status = document.getElementById("status");
 
-  if (!produto) {
+  if (!produtoInput) {
     status.textContent = "Digite o nome do produto.";
     status.style.color = "red";
     return;
   }
 
-  const baseSKU = formatarSKU(produto);
+  const palavras = normalizar(produtoInput).split(" ");
+
+  const categoria = CATEGORIAS[palavras[0]] || abreviar(palavras[0], 4);
+  const nomeProduto = abreviar(palavras[1] || "", 4);
+  const cor = abreviar(palavras[2] || "", 3);
+
+  const sku = `${PREFIXO}-${categoria}-${nomeProduto}-${cor}`;
+
   const db = getDatabase();
 
-  const relacionados = db.filter(sku => sku.startsWith(baseSKU));
-  const sequencial = String(relacionados.length + 1).padStart(3, "0");
+  if (db.includes(sku)) {
+    status.textContent = "⚠️ SKU já existe.";
+    status.style.color = "red";
+    document.getElementById("sku").value = "";
+    return;
+  }
 
-  const skuFinal = `${baseSKU}-${sequencial}`;
-
-  db.push(skuFinal);
+  db.push(sku);
   saveDatabase(db);
 
-  document.getElementById("sku").value = skuFinal;
+  document.getElementById("sku").value = sku;
   status.textContent = "SKU salvo com sucesso!";
   status.style.color = "green";
 }
