@@ -7,26 +7,28 @@
 </head>
 <body>
 
-  <div class="container">
-    <h1>Gerador de SKU</h1>
+<div class="container">
+  <h1>Gerador de SKU</h1>
 
-    <label>Nome do produto</label>
-    <input 
-      type="text" 
-      id="produto" 
-      placeholder="Ex: Vestido Tarsila Marrom"
-    />
+  <label>Produto base</label>
+  <input type="text" id="produto" placeholder="Ex: Blusa Celina" />
 
-    <button onclick="gerarSKU()">Gerar SKU</button>
+  <label>Variações</label>
 
-    <label>SKU gerado</label>
-    <input type="text" id="sku" readonly />
-
-    <p id="status"></p>
-
-    <button onclick="copiarSKU()">Copiar SKU</button>
+  <div id="variacoes">
+    <div class="variacao">
+      <input type="text" placeholder="Ex: Verde" />
+    </div>
   </div>
 
-  <script src="script.js"></script>
+  <button type="button" onclick="adicionarVariacao()">+ Adicionar variação</button>
+
+  <button onclick="gerarSKUs()">Gerar SKUs</button>
+
+  <div id="resultado"></div>
+  <p id="status"></p>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
