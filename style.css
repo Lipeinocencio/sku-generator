@@ -1,4 +1,4 @@
-* { box-sizing: border-box; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: Arial, sans-serif;
@@ -11,7 +11,11 @@ body {
   justify-content: center;
 }
 
-/* ===== LOGIN ===== */
+.hidden { display: none !important; }
+
+/* ===========================
+   LOGIN
+   =========================== */
 .login-container {
   background: #fff;
   max-width: 380px;
@@ -22,28 +26,33 @@ body {
   text-align: center;
 }
 
-.login-container h1 {
-  margin-top: 0;
-  font-size: 22px;
-  color: #333;
-}
-
-.login-container .login-icon {
+.login-icon {
   font-size: 48px;
   margin-bottom: 10px;
 }
 
-.login-container input {
+.login-title {
+  font-size: 22px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.login-subtitle {
+  color: #777;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.login-input {
   width: 100%;
   padding: 12px;
   margin-bottom: 12px;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 14px;
-  box-sizing: border-box;
 }
 
-.login-container button {
+.login-btn {
   width: 100%;
   padding: 12px;
   background: #000;
@@ -53,7 +62,7 @@ body {
   border-radius: 4px;
   font-size: 16px;
 }
-.login-container button:hover { background: #333; }
+.login-btn:hover { background: #333; }
 
 .login-error {
   color: #e53935;
@@ -62,7 +71,9 @@ body {
   min-height: 20px;
 }
 
-/* ===== APP ===== */
+/* ===========================
+   APP CONTAINER
+   =========================== */
 .container {
   background: #fff;
   max-width: 520px;
@@ -77,9 +88,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 5px;
+  margin-bottom: 15px;
 }
-.app-header h1 { margin: 0; }
+.app-header h1 {
+  margin: 0;
+  font-size: 22px;
+  color: #333;
+}
 
 .user-info {
   display: flex;
@@ -102,28 +117,19 @@ body {
 }
 .btn-logout:hover { background: #f5f5f5; color: #000; border-color: #999; }
 
-h1 { margin-top: 0; color: #333; font-size: 22px; }
-
-h2 {
-  margin-top: 25px;
-  margin-bottom: 10px;
-  color: #333;
-  font-size: 17px;
-  border-bottom: 2px solid #eee;
-  padding-bottom: 8px;
-}
-
-input {
+/* ===========================
+   INPUTS & BUTTONS (APP)
+   =========================== */
+.container input {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 14px;
-  box-sizing: border-box;
 }
 
-button {
+.container button {
   width: 100%;
   padding: 12px;
   background: #000;
@@ -134,15 +140,18 @@ button {
   font-size: 15px;
   margin-top: 5px;
 }
-button:hover { background: #333; }
+.container button:hover { background: #333; }
 
-.btn-secondary { background: #555; }
-.btn-secondary:hover { background: #777; }
-.btn-danger { background: #e53935; }
-.btn-danger:hover { background: #b71c1c; }
-.btn-success { background: #2e7d32; }
-.btn-success:hover { background: #1b5e20; }
+.btn-secondary { background: #555 !important; }
+.btn-secondary:hover { background: #777 !important; }
+.btn-danger { background: #e53935 !important; }
+.btn-danger:hover { background: #b71c1c !important; }
+.btn-success { background: #2e7d32 !important; }
+.btn-success:hover { background: #1b5e20 !important; }
 
+/* ===========================
+   LINKS & STATUS
+   =========================== */
 small.add {
   display: inline-block;
   margin-bottom: 10px;
@@ -160,7 +169,9 @@ small.add:hover { color: #000; }
 .ok { color: green; background: #e8f5e9; }
 .warn { color: orange; background: #fff3e0; }
 
-/* ===== PRODUTO BLOCK ===== */
+/* ===========================
+   PRODUTO BLOCK
+   =========================== */
 .produto-block {
   background: #fafafa;
   border: 1px solid #e0e0e0;
@@ -214,10 +225,21 @@ small.add:hover { color: #000; }
   justify-content: center;
   color: #fff;
 }
-.btn-icon-red { background: #e53935; }
-.btn-icon-red:hover { background: #b71c1c; }
+.btn-icon-red { background: #e53935 !important; }
+.btn-icon-red:hover { background: #b71c1c !important; }
 
-/* ===== TOGGLE ===== */
+/* ===========================
+   TOGGLE HEADER
+   =========================== */
+h2 {
+  margin-top: 25px;
+  margin-bottom: 10px;
+  color: #333;
+  font-size: 17px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 8px;
+}
+
 .toggle-header {
   cursor: pointer;
   user-select: none;
@@ -234,7 +256,9 @@ small.add:hover { color: #000; }
 }
 .toggle-icon.open { transform: rotate(90deg); }
 
-/* ===== SKU LIST ===== */
+/* ===========================
+   SKU LIST
+   =========================== */
 .sku-list { margin-top: 10px; }
 
 .sku-item {
@@ -266,16 +290,21 @@ small.add:hover { color: #000; }
 }
 
 .sku-actions { display: flex; gap: 4px; }
-.sku-actions button { width: auto; padding: 5px 10px; margin: 0; font-size: 12px; }
+.sku-actions button {
+  width: auto !important;
+  padding: 5px 10px !important;
+  margin: 0 !important;
+  font-size: 12px !important;
+}
 
-.btn-edit { background: #1565c0; }
-.btn-edit:hover { background: #0d47a1; }
-.btn-save { background: #2e7d32; }
-.btn-save:hover { background: #1b5e20; }
-.btn-del { background: #e53935; }
-.btn-del:hover { background: #b71c1c; }
-.btn-cancel { background: #888; }
-.btn-cancel:hover { background: #666; }
+.btn-edit { background: #1565c0 !important; }
+.btn-edit:hover { background: #0d47a1 !important; }
+.btn-save { background: #2e7d32 !important; }
+.btn-save:hover { background: #1b5e20 !important; }
+.btn-del { background: #e53935 !important; }
+.btn-del:hover { background: #b71c1c !important; }
+.btn-cancel { background: #888 !important; }
+.btn-cancel:hover { background: #666 !important; }
 
 .empty-msg {
   color: #999;
@@ -288,9 +317,11 @@ small.add:hover { color: #000; }
 
 .search-bar { display: flex; gap: 8px; margin-bottom: 10px; }
 .search-bar input { flex: 1; margin: 0; }
-.search-bar button { width: auto; padding: 10px 16px; margin: 0; }
+.search-bar button {
+  width: auto !important;
+  padding: 10px 16px !important;
+  margin: 0 !important;
+}
 
 .btn-group { display: flex; gap: 8px; margin-top: 10px; }
 .btn-group button { flex: 1; }
-
-.hidden { display: none !important; }
