@@ -68,11 +68,28 @@ function gerarSKUs() {
   let novos = 0;
   let existentes = 0;
 
-  const variacoes = document.querySelectorAll("#variacoes input");
+  const variacoes = Array.from(
+    document.querySelectorAll("#variacoes input")
+  ).filter(v => v.value.trim() !== "");
 
+  // 🔹 SEM VARIAÇÃO
+  if (variacoes.length === 0) {
+    if (db.includes(baseSku)) {
+      resultado.innerHTML = `<p style="color:orange">⚠ ${baseSku} (já existia)</p>`;
+      existentes++;
+    } else {
+      db.push(baseSku);
+      resultado.innerHTML = `<p style="color:green">✔ ${baseSku}</p>`;
+      novos++;
+    }
+
+    saveDatabase(db);
+    status.textContent = `${novos} novo(s), ${existentes} já existente(s)`;
+    return;
+  }
+
+  // 🔹 COM VARIAÇÕES
   variacoes.forEach(v => {
-    if (!v.value) return;
-
     const codigoVariacao = gerarCodigoVariacao(baseSku, v.value, db);
     const skuFinal = `${baseSku}-${codigoVariacao}`;
 
