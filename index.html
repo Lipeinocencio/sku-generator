@@ -3,39 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <title>Gerador de SKU</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <div class="container">
     <h1>Gerador de SKU</h1>
 
-    <input
-      type="text"
-      id="produto"
-      placeholder="Ex: Blusa Canelada"
-    />
-
-    <button type="button" onclick="adicionarVariacao()">
-      + adicionar variação
-    </button>
+    <input id="produto" placeholder="Blusa Canelada">
 
     <div id="variacoes"></div>
 
-    <button type="button" onclick="gerarSKUs()">
-      Gerar SKU
-    </button>
+    <small class="add" onclick="adicionarVariacao()">+ adicionar variação</small>
 
-    <p id="status"></p>
+    <button onclick="gerarSKUs()">Gerar SKU</button>
+
+    <div id="status"></div>
     <div id="resultado"></div>
   </div>
 
-  <!-- TESTE DE JS -->
-  <script>
-    console.log("JS INLINE FUNCIONANDO");
-  </script>
+  <!-- ⚠️ SCRIPT NO FINAL DO BODY -->
+  <script src="script.js"></script>
 
-  <!-- SCRIPT PRINCIPAL -->
-  <script src="./script.js"></script>
 </body>
 </html>
