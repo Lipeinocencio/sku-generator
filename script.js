@@ -1,61 +1,97 @@
-body {
-  font-family: Arial, sans-serif;
-  background: #f5f5f5;
+const STORAGE_KEY = "sku_database";
+const PREFIXO = "mag";
+
+const CATEGORIAS = {
+  "BLUSA": "blus",
+  "VESTIDO": "vest",
+  "CALCA": "calc"
+};
+
+function getDatabase() {
+  return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 }
 
-.container {
-  background: #fff;
-  max-width: 420px;
-  margin: 60px auto;
-  padding: 25px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,.1);
+function saveDatabase(db) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
 }
 
-h1 {
-  margin-bottom: 20px;
+function normalizar(txt) {
+  return txt
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toUpperCase()
+    .trim();
 }
 
-input {
-  width: 100%;
-  padding: 10px;
-  margin-top: 8px;
-  box-sizing: border-box;
+function abreviar(txt, n) {
+  return txt.substring(0, n).toLowerCase();
 }
 
-.add-variacao {
-  background: none;
-  border: none;
-  color: #555;
-  font-size: 12px;
-  margin-top: 6px;
-  cursor: pointer;
-  text-align: left;
+function adicionarVariacao() {
+  const div = document.getElementById("variacoes");
+
+  const input = document.createElement("input");
+  input.placeholder = "Ex: Verde";
+  div.appendChild(input);
 }
 
-.add-variacao:hover {
-  text-decoration: underline;
-}
+function gerarSKUs() {
+  const produto = document.getElementById("produto").value;
+  const status = document.getElementById("status");
+  const resultado = document.getElementById("resultado");
 
-.gerar {
-  width: 100%;
-  padding: 12px;
-  margin-top: 15px;
-  background: black;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
+  resultado.innerHTML = "";
+  status.textContent = "";
 
-#variacoes input {
-  margin-top: 6px;
-}
+  if (!produto) {
+    status.textContent = "Digite o nome do produto.";
+    status.style.color = "red";
+    return;
+  }
 
-#resultado p {
-  margin: 6px 0;
-}
+  const palavras = normalizar(produto).split(" ");
+  const categoria = CATEGORIAS[palavras[0]] || abreviar(palavras[0], 4);
+  const nome = abreviar(palavras[1] || "", 4);
 
-#status {
-  margin-top: 10px;
-  font-size: 13px;
+  const db = getDatabase();
+  let novos = 0;
+  let existentes = 0;
+
+  const variacoes = document.querySelectorAll("#variacoes input");
+
+  // 🔹 Sem variação
+  if (variacoes.length === 0) {
+    const sku = `${PREFIXO}-${categoria}-${nome}`;
+
+    if (db.includes(sku)) {
+      resultado.innerHTML = `<p style="color:orange">⚠ ${sku} (já existia)</p>`;
+      existentes++;
+    } else {
+      db.push(sku);
+      resultado.innerHTML = `<p style="color:green">✔ ${sku}</p>`;
+      novos++;
+    }
+  }
+
+  // 🔹 Com variações
+  variacoes.forEach(v => {
+    if (!v.value) return;
+
+    const cor = abreviar(normalizar(v.value), 3);
+    const sku = `${PREFIXO}-${categoria}-${nome}-${cor}`;
+
+    if (db.includes(sku)) {
+      resultado.innerHTML += `<p style="color:orange">⚠ ${sku} (já existia)</p>`;
+      existentes++;
+    } else {
+      db.push(sku);
+      resultado.innerHTML += `<p style="color:green">✔ ${sku}</p>`;
+      novos++;
+    }
+  });
+
+  saveDatabase(db);
+
+  status.textContent = `${novos} novo(s), ${existentes} já existente(s)`;
+  status.style.color = "black";
 }
