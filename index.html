@@ -7,19 +7,50 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
+
+  <!-- TELA DE LOGIN -->
+  <div class="login-container" id="telaLogin">
+    <div class="login-icon">🔐</div>
     <h1>Gerador de SKU</h1>
+    <p style="color:#777; font-size:14px; margin-bottom:20px;">Faça login para acessar o sistema</p>
+    <input type="text" id="loginUser" placeholder="Usuário" />
+    <input type="password" id="loginPass" placeholder="Senha" />
+    <div class="login-error" id="loginError"></div>
+    <button id="btnLogin">Entrar</button>
+  </div>
 
-    <input id="produto" type="text" placeholder="Ex: Blusa Canelada" />
+  <!-- TELA DO APP -->
+  <div class="container hidden" id="telaApp">
+    <div class="app-header">
+      <h1>📦 Gerador de SKU</h1>
+      <div class="user-info">
+        <span id="welcomeUser"></span>
+        <button class="btn-logout" id="btnLogout">Sair</button>
+      </div>
+    </div>
 
-    <div id="variacoes"></div>
+    <div id="listaProdutos"></div>
+    <small class="add" id="btnAddProduto">+ adicionar produto</small>
 
-    <small class="add" id="btnVariacao">+ adicionar variação</small>
-
-    <button id="btnGerar">Gerar SKU</button>
+    <button id="btnGerar">Gerar SKUs</button>
+    <button class="btn-secondary" id="btnLimpar" style="margin-top:8px">Limpar campos</button>
 
     <div id="status"></div>
     <div id="resultado"></div>
+
+    <h2 class="toggle-header" id="toggleSalvos">📋 SKUs Salvos <span class="counter" id="skuCounter">(0)</span> <span class="toggle-icon" id="toggleIcon">▶</span></h2>
+
+    <div id="secaoSalvos" style="display:none;">
+      <div class="search-bar">
+        <input type="text" id="buscaSku" placeholder="Buscar SKU..." />
+        <button class="btn-secondary" id="btnBuscar">🔍</button>
+      </div>
+      <div class="sku-list" id="skuList"></div>
+      <div class="btn-group">
+        <button class="btn-success" id="btnExportar">📥 Exportar CSV</button>
+        <button class="btn-danger" id="btnLimparTudo">🗑 Limpar Tudo</button>
+      </div>
+    </div>
   </div>
 
   <script src="script.js"></script>
