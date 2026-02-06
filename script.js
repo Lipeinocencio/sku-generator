@@ -14,7 +14,7 @@ let loggedUser = null;
 // ===== BANCO (localStorage) =====
 function getDatabase() {
   try {
-    const data = localStorage.getItem(STORAGE_KEY);
+    var data = localStorage.getItem(STORAGE_KEY);
     return data ? JSON.parse(data) : [];
   } catch (e) {
     return window.tempDB || [];
@@ -75,19 +75,30 @@ function fazerLogin() {
   loggedUser = found;
   erro.textContent = "";
 
-  // Salvar sessão
-  try { localStorage.setItem(SESSION_KEY, JSON.stringify({ user: found.user })); } catch (e) {}
+  // Salvar sessão no localStorage
+  try {
+    localStorage.setItem(SESSION_KEY, JSON.stringify({ user: found.user }));
+  } catch (e) {}
 
+  entrarNoApp(found);
+}
+
+function entrarNoApp(usuario) {
   document.getElementById("telaLogin").classList.add("hidden");
   document.getElementById("telaApp").classList.remove("hidden");
-  document.getElementById("welcomeUser").textContent = "👤 " + found.nome;
+  document.getElementById("welcomeUser").textContent = "👤 " + usuario.nome;
   adicionarProduto();
   renderSkuList();
 }
 
 function fazerLogout() {
   loggedUser = null;
-  try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
+
+  // Remover sessão
+  try {
+    localStorage.removeItem(SESSION_KEY);
+  } catch (e) {}
+
   document.getElementById("telaApp").classList.add("hidden");
   document.getElementById("telaLogin").classList.remove("hidden");
   document.getElementById("loginUser").value = "";
@@ -97,6 +108,24 @@ function fazerLogout() {
   document.getElementById("resultado").innerHTML = "";
   document.getElementById("status").innerHTML = "";
   document.getElementById("loginUser").focus();
+}
+
+// Verificar se já tem sessão salva
+function verificarSessao() {
+  try {
+    var session = localStorage.getItem(SESSION_KEY);
+    if (session) {
+      var data = JSON.parse(session);
+      for (var i = 0; i < USUARIOS.length; i++) {
+        if (USUARIOS[i].user === data.user) {
+          loggedUser = USUARIOS[i];
+          entrarNoApp(USUARIOS[i]);
+          return true;
+        }
+      }
+    }
+  } catch (e) {}
+  return false;
 }
 
 // ===== PRODUTO =====
@@ -405,24 +434,10 @@ function buscarSku() {
 // ===== EVENTOS =====
 document.addEventListener("DOMContentLoaded", function () {
 
-  // Verificar sessão salva
-  try {
-    var session = localStorage.getItem(SESSION_KEY);
-    if (session) {
-      var data = JSON.parse(session);
-      for (var i = 0; i < USUARIOS.length; i++) {
-        if (USUARIOS[i].user === data.user) {
-          loggedUser = USUARIOS[i];
-          document.getElementById("telaLogin").classList.add("hidden");
-          document.getElementById("telaApp").classList.remove("hidden");
-          document.getElementById("welcomeUser").textContent = "👤 " + USUARIOS[i].nome;
-          adicionarProduto();
-          renderSkuList();
-          break;
-        }
-      }
-    }
-  } catch (e) {}
+  // Verificar se já está logado
+  if (!verificarSessao()) {
+    document.getElementById("loginUser").focus();
+  }
 
   // Login
   document.getElementById("btnLogin").addEventListener("click", fazerLogin);
@@ -454,6 +469,4 @@ document.addEventListener("DOMContentLoaded", function () {
       icon.classList.add("open");
     }
   });
-
-  document.getElementById("loginUser").focus();
 });
