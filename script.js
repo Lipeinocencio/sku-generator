@@ -4,11 +4,22 @@ const PREFIXO = "mag";
 
 // ===== BANCO =====
 function getDatabase() {
-  return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  try {
+    const data = localStorage.getItem(STORAGE_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch (e) {
+    console.warn("localStorage não disponível, usando memória temporária");
+    return window.tempDB || [];
+  }
 }
 
 function saveDatabase(db) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+  } catch (e) {
+    console.warn("Não foi possível salvar no localStorage");
+    window.tempDB = db;
+  }
 }
 
 // ===== UTIL =====
@@ -40,6 +51,7 @@ function adicionarVariacao() {
   const div = document.getElementById("variacoes");
   const input = document.createElement("input");
   input.placeholder = "Ex: Verde";
+  input.type = "text";
   div.appendChild(input);
 }
 
@@ -78,7 +90,7 @@ function gerarSKUs() {
       existentes++;
     } else {
       db.push(baseSku);
-      resultado.innerHTML = `<p class="ok">✔ ${baseSku}</p>`;
+      resultado.innerHTML = `<p class="ok">✓ ${baseSku}</p>`;
       novos++;
     }
   } else {
@@ -91,7 +103,7 @@ function gerarSKUs() {
         existentes++;
       } else {
         db.push(skuFinal);
-        resultado.innerHTML += `<p class="ok">✔ ${skuFinal}</p>`;
+        resultado.innerHTML += `<p class="ok">✓ ${skuFinal}</p>`;
         novos++;
       }
     });
@@ -103,6 +115,14 @@ function gerarSKUs() {
 
 // ===== EVENTOS =====
 document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("btnVariacao").addEventListener("click", adicionarVariacao);
-  document.getElementById("btnGerar").addEventListener("click", gerarSKUs);
+  const btnVariacao = document.getElementById("btnVariacao");
+  const btnGerar = document.getElementById("btnGerar");
+  
+  if (btnVariacao) {
+    btnVariacao.addEventListener("click", adicionarVariacao);
+  }
+  
+  if (btnGerar) {
+    btnGerar.addEventListener("click", gerarSKUs);
+  }
 });
