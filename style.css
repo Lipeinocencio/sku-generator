@@ -1,6 +1,8 @@
 body {
   font-family: Arial, sans-serif;
   background: #f3f3f3;
+  margin: 0;
+  padding: 0;
 }
 
 .container {
@@ -9,12 +11,22 @@ body {
   margin: 60px auto;
   padding: 30px;
   border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+  margin-top: 0;
+  color: #333;
 }
 
 input {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 14px;
 }
 
 button {
@@ -24,6 +36,13 @@ button {
   color: #fff;
   border: none;
   cursor: pointer;
+  border-radius: 4px;
+  font-size: 16px;
+  margin-top: 5px;
+}
+
+button:hover {
+  background: #333;
 }
 
 small.add {
@@ -31,7 +50,34 @@ small.add {
   margin-bottom: 15px;
   cursor: pointer;
   color: #555;
+  text-decoration: underline;
 }
 
-.ok { color: green; }
-.warn { color: orange; }
+small.add:hover {
+  color: #000;
+}
+
+#status {
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+#resultado {
+  margin-top: 10px;
+}
+
+#resultado p {
+  margin: 5px 0;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.ok { 
+  color: green;
+  background: #e8f5e9;
+}
+
+.warn { 
+  color: orange;
+  background: #fff3e0;
+}
