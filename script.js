@@ -15,7 +15,19 @@ let loggedUser = null;
 function getDatabase() {
   try {
     var data = localStorage.getItem(STORAGE_KEY);
-    return data ? JSON.parse(data) : [];
+    
+    // Se o localStorage já tem dados, retorna eles
+    if (data && JSON.parse(data).length > 0) {
+      return JSON.parse(data);
+    }
+    
+    // Se estiver vazio, verifica se existe o backup inicial e popula o banco
+    if (typeof SKUS_INICIAIS !== 'undefined' && SKUS_INICIAIS.length > 0) {
+      saveDatabase(SKUS_INICIAIS); // Salva na máquina para não ter que recriar
+      return [...SKUS_INICIAIS];
+    }
+    
+    return [];
   } catch (e) {
     return window.tempDB || [];
   }
