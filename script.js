@@ -1,6 +1,6 @@
 // ===== CREDENCIAIS =====
 const USUARIOS = [
-  { user: "admin", pass: "admin123", nome: "Administrador" },
+  { user: "admin", pass: "@rtemis2024RP", nome: "Administrador" },
   { user: "operador", pass: "op2024", nome: "Operador" },
   { user: "mag", pass: "mag123", nome: "Magazine" }
 ];
